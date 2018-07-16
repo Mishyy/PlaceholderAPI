@@ -22,6 +22,7 @@ package me.clip.placeholderapi.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class FileUtil {
         list = gather(file.toURI().toURL(), list, type);
       }
       return list;
-    } catch (Throwable t) {
+    } catch (Throwable ignored) {
     }
     return null;
   }
@@ -67,31 +68,28 @@ public class FileUtil {
     if (list == null) {
       list = new ArrayList<>();
     }
-    try {
-      URLClassLoader cl = new URLClassLoader(new URL[]{jar}, clazz.getClassLoader());
-      JarInputStream jis = new JarInputStream(jar.openStream());
-      while (true) {
-        JarEntry j = jis.getNextJarEntry();
-        if (j == null) {
-          break;
-        }
-        String name = j.getName();
-        if (name == null || name.isEmpty()) {
-          continue;
-        }
-        if (name.endsWith(".class")) {
-          name = name.replace("/", ".");
-          String cname = name.substring(0, name.lastIndexOf(".class"));
-          Class<?> c = cl.loadClass(cname);
-          if (clazz.isAssignableFrom(c)) {
-            list.add(c);
+
+    try (URLClassLoader loader = new URLClassLoader(new URL[]{jar}, clazz.getClassLoader())) {
+      try (JarInputStream inputStream = new JarInputStream(jar.openStream())) {
+        JarEntry jarEntry;
+        while ((jarEntry = inputStream.getNextJarEntry()) != null) {
+          String name = jarEntry.getName();
+          if (name != null && !name.isEmpty() && name.endsWith(".class")) {
+            name = name.replace("/", ".");
+            String className = name.substring(0, name.lastIndexOf(".class"));
+            Class<?> c = loader.loadClass(className);
+            if (clazz.isAssignableFrom(c)) {
+              list.add(c);
+            }
           }
         }
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
       }
-      cl.close();
-      jis.close();
-    } catch (Throwable t) {
+    } catch (IOException e) {
+      e.printStackTrace();
     }
     return list;
   }
+
 }

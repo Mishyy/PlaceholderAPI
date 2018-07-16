@@ -321,9 +321,9 @@ public class ExpansionCloudCommands implements CommandExecutor {
       if (!(s instanceof Player)) {
 
         for (Entry<Integer, CloudExpansion> expansion : ex.entrySet()) {
-            if (expansion == null || expansion.getValue() == null) {
-                continue;
-            }
+          if (expansion == null || expansion.getValue() == null) {
+            continue;
+          }
           msg(s,
               "&b" + (expansion.getKey() + 1) + "&7: " + (expansion.getValue().shouldUpdate() ? "&6"
                   : (expansion.getValue().hasExpansion() ? "&a" : "&7")) + expansion.getValue()

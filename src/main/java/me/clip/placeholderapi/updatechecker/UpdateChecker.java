@@ -65,9 +65,9 @@ public class UpdateChecker implements Listener {
   }
 
   private boolean spigotIsNewer() {
-      if (spigotVersion == null || spigotVersion.isEmpty()) {
-          return false;
-      }
+    if (spigotVersion == null || spigotVersion.isEmpty()) {
+      return false;
+    }
     String plV = toReadable(pluginVersion);
     String spV = toReadable(spigotVersion);
     return plV.compareTo(spV) < 0;

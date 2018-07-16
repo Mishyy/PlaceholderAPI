@@ -33,4 +33,5 @@ public interface Cacheable {
    * Called when the implementing class is unregistered from PlaceholderAPI
    */
   void clear();
+
 }

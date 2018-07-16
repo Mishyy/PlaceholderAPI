@@ -20,6 +20,8 @@
  */
 package me.clip.placeholderapi.expansion;
 
+import java.util.Arrays;
+
 public enum NMSVersion {
 
   UNKNOWN("unknown"),
@@ -36,19 +38,16 @@ public enum NMSVersion {
   SPIGOT_1_11_R1("v1_11_R1"),
   SPIGOT_1_12_R1("v1_12_R1");
 
-  private String version;
+  private final String version;
 
   NMSVersion(String version) {
     this.version = version;
   }
 
   public static NMSVersion getVersion(String version) {
-    for (NMSVersion v : values()) {
-      if (v.getVersion().equalsIgnoreCase(version)) {
-        return v;
-      }
-    }
-    return NMSVersion.UNKNOWN;
+    return Arrays.stream(values())
+        .filter(nmsVersion -> nmsVersion.getVersion().equalsIgnoreCase(version))
+        .findFirst().orElse(NMSVersion.UNKNOWN);
   }
 
   public String getVersion() {

@@ -172,7 +172,6 @@ public abstract class PlaceholderExpansion extends PlaceholderHook {
     return getPlaceholderAPI().getConfig().contains("expansions." + getIdentifier() + "." + path);
   }
 
-
   /**
    * @deprecated As of versions greater than 2.8.7, use {@link #getRequiredPlugin()}
    */
@@ -196,4 +195,5 @@ public abstract class PlaceholderExpansion extends PlaceholderHook {
   public String getLink() {
     return null;
   }
+
 }

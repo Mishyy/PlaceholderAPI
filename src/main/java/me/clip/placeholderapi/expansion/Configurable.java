@@ -40,4 +40,5 @@ public interface Configurable {
    * config.yml file
    */
   Map<String, Object> getDefaults();
+
 }
